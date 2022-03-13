@@ -171,199 +171,202 @@
 >
 >2. <u>**类什么时候被加载**</u>
 >
->   >* 创建对象实例时(new)
->   >* 创建==子类对象==，父类也会被加载
->   >* 使用==类的静态成员==时(静态属性，静态方法)
->   >
->   >```Java
->   >public class test002 {
->   >    public static void main(String[] args) {
->   >        //new，同时A的父类B中的代码块也会被执行
->   >        A a = new A();
->   >        //调用类.静态成员
->   >        System.out.println(A.n);
->   >    }
->   >}
->   >
->   >class B{
->   >    {
->   >        System.out.println("B is codeblock");
->   >    }
->   >}
->   >
->   >class A extends B{
->   >    public static int n = 1;
->   >    static{
->   >        System.out.println("A is codeblock");
->   >    }
->   >}
+>  >* 创建对象实例时(new)
+>  >* 创建==子类对象==，父类也会被加载
+>  >* 使用==类的静态成员==时(静态属性，静态方法)
+>  >
+>  >```Java
+>  >public class test002 {
+>  >    public static void main(String[] args) {
+>  >        //new，同时A的父类B中的代码块也会被执行
+>  >        A a = new A();
+>  >        //调用类.静态成员
+>  >        System.out.println(A.n);
+>  >    }
+>  >}
+>  >
+>  >class B{
+>  >    {
+>  >        System.out.println("B is codeblock");
+>  >    }
+>  >}
+>  >
+>  >class A extends B{
+>  >    public static int n = 1;
+>  >    static{
+>  >        System.out.println("A is codeblock");
+>  >    }
+>  >}
 >
 >3. 普通的代码块，在创建对象实例时，会被隐式的调用。被创建一次调用一次。如果只是使用==**类的静态成员**==时，普通代码块并不会执行。普通代码块在new对象时，被调用，而且是每创建一次，就调用一次，所以可以简单地理解普通代码块就是构造器的补充
 >
 >4. 创建一个对象时，在一个类的调用顺序是(难点、重点):
 >
->   >* 调用==静态代码块和静态属性初始化==时（注意：静态代码块和静态属性初始化调用的优先级一样，如果有多个静态代码块和多个静态变量初始化，则按他们定义的顺序调用）
->   >
->   >```java
->   >public class test002 {
->   >    public static void main(String[] args) {
->   >        A a = new A();
->   >    }
->   >}
->   >
->   >class A {
->   >    private static int n1 = getN1();
->   >    static {
->   >        System.out.println("A 静态代码块");
->   >    }
->   >    public static int getN1(){
->   >        System.out.println("getN1被调用");
->   >        return 100;
->   >    }
->   >}
->   >OutPut:
->   >getN1被调用
->   >A 静态代码块
->   >```
->   >
->   >* 调用普通代码块和普通属性的初始化(注意：普通代码块和普通属性初始化调用的优先级一样，如果有多个普通代码块和多个普通属性初始化，则按定义顺序调用)
->   >* 调用==构造方法/构造器==(在代码块执行之后)
+>  >* 调用==静态代码块和静态属性初始化==时（注意：静态代码块和静态属性初始化调用的优先级一样，如果有多个静态代码块和多个静态变量初始化，则按他们定义的顺序调用）
+>  >
+>  >```java
+>  >public class test002 {
+>  >    public static void main(String[] args) {
+>  >        A a = new A();
+>  >    }
+>  >}
+>  >
+>  >class A {
+>  >    private static int n1 = getN1();
+>  >    static {
+>  >        System.out.println("A 静态代码块");
+>  >    }
+>  >    public static int getN1(){
+>  >        System.out.println("getN1被调用");
+>  >        return 100;
+>  >    }
+>  >}
+>  >OutPut:
+>  >getN1被调用
+>  >A 静态代码块
+>  >```
+>  >
+>  >* 调用普通代码块和普通属性的初始化(注意：普通代码块和普通属性初始化调用的优先级一样，如果有多个普通代码块和多个普通属性初始化，则按定义顺序调用)
+>  >* 调用==构造方法/构造器==(在代码块执行之后)
 >
 >5. 构造方法(构造器)的前面实际上是隐含了super()和调用普通代码块，新写一个类演示，静态相关的代码块，属性初始化，在类加载时，就执行完毕。因此是优先于构造器和普通代码块执行
 >
->   >父类构造器被调用
->   >
->   >子类的普通代码块和普通属性初始化被调用
->   >
->   >子类的构造器被调用
+>  >父类构造器被调用
+>  >
+>  >子类的普通代码块和普通属性初始化被调用
+>  >
+>  >子类的构造器被调用
 >
 >6. 创建一个子类时(继承关系)，其静态代码块，静态属性初始化，普通代码块，普通属性初始化，构造方法的==***调用顺序***==如下：
 >
->   >1. **父类的静态代码块和静态属性初始化(优先级一样，按定义顺序执行)**
->   >2. **子类的静态代码块和静态属性初始化(优先级一样，按定义顺序执行)**
->   >3. **父类的普通代码块和普通属性初始化(优先级一样，按定义顺序执行)**
->   >4. **父类的构造方法**
->   >5. **子类的普通代码块和普通属性初始化(优先级一样，按定义顺序执行)**
->   >6. **子类的构造方法**
+>  >1. **父类的静态代码块和静态属性初始化(优先级一样，按定义顺序执行)**
+>  >2. **子类的静态代码块和静态属性初始化(优先级一样，按定义顺序执行)**
+>  >3. **父类的普通代码块和普通属性初始化(优先级一样，按定义顺序执行)**
+>  >4. **父类的构造方法**
+>  >5. **子类的普通代码块和普通属性初始化(优先级一样，按定义顺序执行)**
+>  >6. **子类的构造方法**
 >
->   ```java
->   public class test002 {
->       public static void main(String[] args) {
->           C c = new C();
->       }
->   }
->   class A {
->       static {
->           System.out.println("A的静态代码块被执行");
->       }
->       {
->           System.out.println("A的普通代码块被执行");
->       }
->       public A(){
->           System.out.println("A的构造器被执行");
->       }
->   }
->   
->   class B extends A {
->       static {
->           System.out.println("B的静态代码块被执行");
->       }
->       {
->           System.out.println("B的普通代码块被执行");
->       }
->       public B(){
->           System.out.println("B的构造器被执行");
->       }
->   }
->   class C extends B {
->       static {
->           System.out.println("C的静态代码块被执行");
->       }
->       {
->           System.out.println("C的普通代码块被执行");
->       }
->       public C(){
->           System.out.println("C的构造器被执行");
->       }
->   }
->   Output:
->   A的静态代码块被执行
->   B的静态代码块被执行
->   C的静态代码块被执行
->   A的普通代码块被执行
->   A的构造器被执行
->   B的普通代码块被执行
->   B的构造器被执行
->   C的普通代码块被执行
->   C的构造器被执行
->   
->   //先进行类的加载
->   A.static --> B.static --> C.static --> 
->   //再进行对象的创建    
->   A.norm --> A.constructor --> B.norm
->   --> B.constructor --> C.norm ---> C.constructor
+>  ```java
+>  public class test002 {
+>      public static void main(String[] args) {
+>          C c = new C();
+>      }
+>  }
+>  class A {
+>      static {
+>          System.out.println("A的静态代码块被执行");
+>      }
+>      {
+>          System.out.println("A的普通代码块被执行");
+>      }
+>      public A(){
+>          System.out.println("A的构造器被执行");
+>      }
+>  }
+>  
+>  class B extends A {
+>      static {
+>          System.out.println("B的静态代码块被执行");
+>      }
+>      {
+>          System.out.println("B的普通代码块被执行");
+>      }
+>      public B(){
+>          System.out.println("B的构造器被执行");
+>      }
+>  }
+>  class C extends B {
+>      static {
+>          System.out.println("C的静态代码块被执行");
+>      }
+>      {
+>          System.out.println("C的普通代码块被执行");
+>      }
+>      public C(){
+>          System.out.println("C的构造器被执行");
+>      }
+>  }
+>  Output:
+>  A的静态代码块被执行
+>  B的静态代码块被执行
+>  C的静态代码块被执行
+>  A的普通代码块被执行
+>  A的构造器被执行
+>  B的普通代码块被执行
+>  B的构造器被执行
+>  C的普通代码块被执行
+>  C的构造器被执行
+>  
+>  //先进行类的加载
+>  A.static --> B.static --> C.static --> 
+>  //再进行对象的创建    
+>  A.norm --> A.constructor --> B.norm
+>  --> B.constructor --> C.norm ---> C.constructor
+>  ```
+>
+>  
 >
 >7. 静态代码块只能直接调用静态成员(静态属性和静态方法)，普通代码块可以调用任意成员
 >
 >8. 要非常注意静态属性初始化同静态代码块一样只会在类加载时执行一次，在类被加载完成后，不会执行第二次
 >
->   ```java
->   public class test002 {
->       public static void main(String[] args) {
->           System.out.println("total = " + Persons.total);
->           System.out.println("total = " + Persons.total);
->       }
->   }
->   class Persons{
->       public static int total = setTotal();
->       static {
->           total = 100;
->           System.out.println("in static blocks");
->       }
->       public static int setTotal(){
->           System.out.println("static initialize");
->           return 0;
->       }
->   }
->   OutPut:
->   static initialize
->   in static blocks
->   total = 100
->   total = 100
->   ```
+>  ```java
+>  public class test002 {
+>      public static void main(String[] args) {
+>          System.out.println("total = " + Persons.total);
+>          System.out.println("total = " + Persons.total);
+>      }
+>  }
+>  class Persons{
+>      public static int total = setTotal();
+>      static {
+>          total = 100;
+>          System.out.println("in static blocks");
+>      }
+>      public static int setTotal(){
+>          System.out.println("static initialize");
+>          return 0;
+>      }
+>  }
+>  OutPut:
+>  static initialize
+>  in static blocks
+>  total = 100
+>  total = 100
+>  ```
 >
->   ```java
->   public class test002 {
->       public static void main(String[] args) {
->           Tests tests = new Tests();
->       }
->   }
->   class Sample{
->       Sample(String s){
->           System.out.println(s);
->       }
->       Sample(){
->           System.out.println("Sample默认的构造函数被调用");
->       }
->   }
->   class Tests{
->       Sample sam1 = new Sample("sam1成员初始化");
->       static Sample sam = new Sample("静态成员sam初始化");
->       static{
->           System.out.println("static块执行");
->           if(sam == null){
->               System.out.println("sam is null");
->           }
->       }
->       Tests(){
->           System.out.println("Test默认构造函数被调用");
->       }
->   }
->   OutPut:
->   静态成员sam初始化
->   static块执行
->   sam1成员初始化
->   Test默认构造函数被调用
+>  ```java
+>  public class test002 {
+>      public static void main(String[] args) {
+>          Tests tests = new Tests();
+>      }
+>  }
+>  class Sample{
+>      Sample(String s){
+>          System.out.println(s);
+>      }
+>      Sample(){
+>          System.out.println("Sample默认的构造函数被调用");
+>      }
+>  }
+>  class Tests{
+>      Sample sam1 = new Sample("sam1成员初始化");
+>      static Sample sam = new Sample("静态成员sam初始化");
+>      static{
+>          System.out.println("static块执行");
+>          if(sam == null){
+>              System.out.println("sam is null");
+>          }
+>      }
+>      Tests(){
+>          System.out.println("Test默认构造函数被调用");
+>      }
+>  }
+>  OutPut:
+>  静态成员sam初始化
+>  static块执行
+>  sam1成员初始化
+>  Test默认构造函数被调用
 
 #### 单例设计模式
 
@@ -456,36 +459,38 @@ java.lang.Runtime就是典型的单例模式
 >
 >2. final修饰的属性在定义时，必须赋初值，并且以后不能再修改，复制可以在如下位置之一(但只能赋值一次，即三个位置必须只选择一个)
 >
->  >* 定义时：public final double TAX_RATE = 0.08
->  >* 在构造器中
->  >* 在代码块中
+> >* 定义时：public final double TAX_RATE = 0.08
+> >* 在构造器中
+> >* 在代码块中
 >
->  ```java
->  class A{
->      public final double x = 2;
->      A{
->          x = 1;
->      }
->      {
->          x = 2; 
->      }
->  }
->  ```
+> ```java
+> class A{
+>     public final double x = 2;
+>     A{
+>         x = 1;
+>     }
+>     {
+>         x = 2; 
+>     }
+> }
+> ```
 >
 >3. 如果final修饰的属性是静态的，则初始化只能在
 >
->  >* 定义时
->  >
->  >* 在静态代码块中，不能在构造器中赋值(构造器依靠对象的创建，然而static的属性需要在类加载的过程中初始化，所以会造成static属性无法初始化，所以会报错)
->  >
->  >  ```java
->  >  class B{
->  >      public static final int TAX_RATE;
->  >      public B {
->  >          TAX_RATE = 8.8;
->  >      }
->  >      //此时编译器会报错
->  >  }
+> >* 定义时
+> >
+> >* 在静态代码块中，不能在构造器中赋值(构造器依靠对象的创建，然而static的属性需要在类加载的过程中初始化，所以会造成static属性无法初始化，所以会报错)
+> >
+> >  ```java
+> >  class B{
+> >      public static final int TAX_RATE;
+> >      public B {
+> >          TAX_RATE = 8.8;
+> >      }
+> >      //此时编译器会报错
+> >  }
+>
+>
 >
 >4. final类不能继承，但是可以实例化对象
 >
@@ -497,21 +502,22 @@ java.lang.Runtime就是典型的单例模式
 >
 >8. final和static往往搭配使用，效率更高，不会导致类的加载，底层编译器作了优化处理
 >
->   ```java
->   main(
->       sout(B.num1); //调用时static代码块也会执行，即进行了类的加载
->       sout(B.num2); //不会导致类的加载
->   )
->   
->   class B {
->       public static int num1 = 1;
->       public final static int num2 = 2; 
->       static{
->           sout("呵呵");
->       }
->   }
+>```java
+>main(
+>    sout(B.num1); //调用时static代码块也会执行，即进行了类的加载
+>    sout(B.num2); //不会导致类的加载
+>)
 >
->9. 包装类(Integer,Double,Float,Boolean等都是final)，String也是final类
+>class B {
+>    public static int num1 = 1;
+>    public final static int num2 = 2; 
+>    static{
+>        sout("呵呵");
+>    }
+>}
+>```
+>
+>1. 包装类(Integer,Double,Float,Boolean等都是final)，String也是final类
 >
 
 #### 抽象类
@@ -556,31 +562,33 @@ java.lang.Runtime就是典型的单例模式
 >
 >6. 抽象方法不能有主体，即不能实现
 >
->   ```java
->   abstract void saa(){};    //错误，不能有方法体
->   ```
+>  ```java
+>  abstract void saa(){};    //错误，不能有方法体
+>  ```
+>
+>  
 >
 >7. 如果一个类继承了抽象类，则它必须==实现抽象类的所有抽象方法==，除非它自己也声明为abstract类
 >
->   ```java
->   abstract class MM {
->       public abstract void f1();
->       public abstract void f2();
->   }
->   
->   class NN extends MM{
->   
->       @Override
->       public void f1() {
->       }
->       @Override
->       public void f2() {
->       }
->   }
->   
->   abstract class PP extends MM{
->   }
->   ```
+>  ```java
+>  abstract class MM {
+>      public abstract void f1();
+>      public abstract void f2();
+>  }
+>  
+>  class NN extends MM{
+>  
+>      @Override
+>      public void f1() {
+>      }
+>      @Override
+>      public void f2() {
+>      }
+>  }
+>  
+>  abstract class PP extends MM{
+>  }
+>  ```
 >
 >8. 抽象类不能使用**==private、final和static==**来修饰，因为这些关键字都是和重写相违背的
 
@@ -588,18 +596,18 @@ java.lang.Runtime就是典型的单例模式
 
 >```java
 >abstract class A{
->    public abstract void job();
->    public void caleTimes(){
->        long start = System.currentTimeMillis();
->        job();
->        long end = System.currentTimeMillis();
->        System.out.println("耗时" + (end - start));
->    }
+>public abstract void job();
+>public void caleTimes(){
+>   long start = System.currentTimeMillis();
+>   job();
+>   long end = System.currentTimeMillis();
+>   System.out.println("耗时" + (end - start));
+>}
 >}、
 >public class AA extends A{
->        public void job(){
->            ...
->        }
+>   public void job(){
+>       ...
+>   }
 >}
 >```
 
@@ -609,37 +617,37 @@ java.lang.Runtime就是典型的单例模式
 
 >```java
 >interface Usb{
->    public void start();
->    public void stop();
+>public void start();
+>public void stop();
 >}
 >class Camera implements Usb{
->    public void start(){
->        ...
->    }
->    public void stop(){
->        ...
->    }  
+>public void start(){
+>   ...
+>}
+>public void stop(){
+>   ...
+>}  
 >}
 >class Phone implements Usb{
->    public void start(){
->        ...
->    }
->    public void stop(){
->        ...
->    } 
+>public void start(){
+>   ...
+>}
+>public void stop(){
+>   ...
+>} 
 >}
 >class Computer{
->    public void working(Usb usb){
->        usb.start();
->        usb.stop();
->    }
+>public void working(Usb usb){
+>   usb.start();
+>   usb.stop();
+>}
 >}
 >main(){
->    Camera camera = new Camera();
->    Phone phone = new Phone();
->    Computer computer  = new Computer();
->    computer.working(phone); 
->    computer.working(camera);
+>Camera camera = new Camera();
+>Phone phone = new Phone();
+>Computer computer  = new Computer();
+>computer.working(phone); 
+>computer.working(camera);
 >}
 >```
 
@@ -649,47 +657,47 @@ java.lang.Runtime就是典型的单例模式
 >
 >* 语法
 >
->  >interface 接口名{
->  >
->  >​     //属性
->  >
->  >​     //方法
->  >
->  >​        ==**在接口，抽象方法可以省略abstract关键字**==
->  >
->  >}
->  >
->  >class 类名 implements 接口{
->  >
->  >​     自己的属性；
->  >
->  >​     自己的方法；
->  >
->  >​     ==必须实现的接口的抽象方法==
->  >
->  >}
->  >
->  >*ps:在jdk7.0以前 接口里的所有方法都没有方法体；*
->  >
->  >*在jdk8.0后接口类可以有静态方法，默认方法，即接口中可以有方法的具体实现*
->  >
->  >```java
->  >interface A{
->  >    //属性
->  >    public int n1 = 10;
->  >    //抽象方法，可以省略abstract关键字
->  >    public void f1();   //等价于 public abstract void f1();
->  >    
->  >    //在jdk8.0之后，可以有默认实现方法，需要使用default关键字修饰
->  >    default public void OK(){
->  >        System.out.println("OK...");
->  >    }
->  >    //在jdk8.0之后，可以有静态方法
->  >    static public void cry(){
->  >        System.out.println("Cry...");
->  >    }
->  >}
->  >```
+> >interface 接口名{
+> >
+> >​     //属性
+> >
+> >​     //方法
+> >
+> >​        ==**在接口，抽象方法可以省略abstract关键字**==
+> >
+> >}
+> >
+> >class 类名 implements 接口{
+> >
+> >​     自己的属性；
+> >
+> >​     自己的方法；
+> >
+> >​     ==必须实现的接口的抽象方法==
+> >
+> >}
+> >
+> >*ps:在jdk7.0以前 接口里的所有方法都没有方法体；*
+> >
+> >*在jdk8.0后接口类可以有静态方法，默认方法，即接口中可以有方法的具体实现*
+> >
+> >```java
+> >interface A{
+> >//属性
+> >public int n1 = 10;
+> >//抽象方法，可以省略abstract关键字
+> >public void f1();   //等价于 public abstract void f1();
+> >
+> >//在jdk8.0之后，可以有默认实现方法，需要使用default关键字修饰
+> >default public void OK(){
+> >   System.out.println("OK...");
+> >}
+> >//在jdk8.0之后，可以有静态方法
+> >static public void cry(){
+> >   System.out.println("Cry...");
+> >}
+> >}
+> >```
 
 ##### 应用场景
 
@@ -709,28 +717,28 @@ java.lang.Runtime就是典型的单例模式
 >
 >3. 一个普通类实现接口，必须将其的所有的方法都实现(除静态方法)
 >
->  ```java
->  interface A{
->      //属性
->      public int n1 = 10;
->      //抽象方法，可以省略abstract关键字
->      public void f1();   //等价于 public abstract void f1();
+> ```java
+> interface A{
+>     //属性
+>     public int n1 = 10;
+>     //抽象方法，可以省略abstract关键字
+>     public void f1();   //等价于 public abstract void f1();
 >
->      //在jdk8.0之后，可以有默认实现方法，需要使用default关键字修饰
->      default void OK(){
->          System.out.println("OK...");
->      }
->      //在jdk8.0之后，可以有静态方法
->      static public void cry(){
->          System.out.println("Cry...");
->      }
->  }
->  class B implements A{
->      @Override
->      public void f1() {}
->      @Override
->      public void OK() {}
->  }
+>     //在jdk8.0之后，可以有默认实现方法，需要使用default关键字修饰
+>     default void OK(){
+>         System.out.println("OK...");
+>     }
+>     //在jdk8.0之后，可以有静态方法
+>     static public void cry(){
+>         System.out.println("Cry...");
+>     }
+> }
+> class B implements A{
+>     @Override
+>     public void f1() {}
+>     @Override
+>     public void OK() {}
+> }
 >
 >4. 抽象类实现接口，可以不用实现接口的所有方法
 >
@@ -740,14 +748,15 @@ java.lang.Runtime就是典型的单例模式
 >
 >7. 一个接口不能继承其他的类，但是可以继承多个别的接口，此时不再使用implements
 >
->   ```java
->   interface A{};
->   interface B{};
->   interface C extends A,B{  
->   };
+>  ```java
+>  interface A{};
+>  interface B{};
+>  interface C extends A,B{  
+>  };
 >
 >8. 接口的修饰符只能是public 和 默认，这点和类的修饰符一样
 >
+> ```
 
 ##### 接口vs继承
 
@@ -769,112 +778,113 @@ java.lang.Runtime就是典型的单例模式
 
 >1. 多态参数
 >
->   >在前面的USB接口案例，USB usb，既可以接收手机对象，又可以接收相机对象，就体现了接口的多态(接口引用可以指向实现了接口的类的对象实例)
+>  >在前面的USB接口案例，USB usb，既可以接收手机对象，又可以接收相机对象，就体现了接口的多态(接口引用可以指向实现了接口的类的对象实例)
 >
->   ```java
->   interface UsbInter{
->       void start();
->       void stop();
->   }
->   class Phone implements UsbInter{
->       @Override
->       public void start() {
->           System.out.println("Phone正在运行");
->       }
->   
->       @Override
->       public void stop() {
->           System.out.println("Phone停止运行");
->       }
->   }
->   class iPad implements UsbInter{
->       @Override
->       public void start() {
->           System.out.println("iPad正在运行");
->       }
->       @Override
->       public void stop() {
->           System.out.println("iPad停止运行");
->       }
->   }
->   class Computer{
->       public void work(UsbInter usbInter){
->           //这里就体现了接口的多态
->           usbInter.start();
->           usbInter.start();
->       }
->   }
->   ```
+>  ```java
+>  interface UsbInter{
+>      void start();
+>      void stop();
+>  }
+>  class Phone implements UsbInter{
+>      @Override
+>      public void start() {
+>          System.out.println("Phone正在运行");
+>      }
+>  
+>      @Override
+>      public void stop() {
+>          System.out.println("Phone停止运行");
+>      }
+>  }
+>  class iPad implements UsbInter{
+>      @Override
+>      public void start() {
+>          System.out.println("iPad正在运行");
+>      }
+>      @Override
+>      public void stop() {
+>          System.out.println("iPad停止运行");
+>      }
+>  }
+>  class Computer{
+>      public void work(UsbInter usbInter){
+>          //这里就体现了接口的多态
+>          usbInter.start();
+>          usbInter.start();
+>      }
+>  }
+>  ```
 >
->   ---
+>  ---
 >
->   ```java
->   //接口类型的引用可以指向实现了接口的对象实例
->   //这也就是参数多态的本质
->   main(){
->       If if = new Monster();
->   }
->   
->   interface IF{}
->   class Monster implements IF{}
+>  ```java
+>  //接口类型的引用可以指向实现了接口的对象实例
+>  //这也就是参数多态的本质
+>  main(){
+>      If if = new Monster();
+>  }
+>  
+>  interface IF{}
+>  class Monster implements IF{}
+>  ```
 >
 >2. 多态数组
 >
->   >演示一个案例：给Usb数组中，存放Phone和相机对象，Phone类还有一个特有的方法call()，请遍历Usb数组，如果是Phone对象，除了调用Usb接口定义的方法外，还需要调用Phone特有的方法call
->   >
->   >```java
->   >public class TestEmployee {
->   >    public static void main(String[] args){
->   >        Usb[] usbs = new Usb[2];
->   >        usbs[0] = new Phone();
->   >        usbs[1] = new Camera();
->   >
->   >        for(int i = 0; i < usbs.length; i++){
->   >            usbs[i].start();//动态绑定机制
->   >            if(usbs[i] instanceof Phone){//进行运行类型判断
->   >                ((Phone)usbs[i]).call();//向下转型
->   >            }
->   >        }
->   >    }
->   >}
->   >interface Usb{
->   >    void start();
->   >}
->   >class Phone implements Usb{
->   >    public void call(){
->   >        System.out.println("Call is working...");
->   >    }
->   >
->   >    @Override
->   >    public void start() {
->   >        System.out.println("Phone starts...");
->   >    }
->   >}
->   >class Camera implements Usb{
->   >    @Override
->   >    public void start() {
->   >        System.out.println("Camera starts...");
->   >    }
->   >}
->   >```
+>  >演示一个案例：给Usb数组中，存放Phone和相机对象，Phone类还有一个特有的方法call()，请遍历Usb数组，如果是Phone对象，除了调用Usb接口定义的方法外，还需要调用Phone特有的方法call
+>  >
+>  >```java
+>  >public class TestEmployee {
+>  >public static void main(String[] args){
+>  >   Usb[] usbs = new Usb[2];
+>  >   usbs[0] = new Phone();
+>  >   usbs[1] = new Camera();
+>  >
+>  >   for(int i = 0; i < usbs.length; i++){
+>  >       usbs[i].start();//动态绑定机制
+>  >       if(usbs[i] instanceof Phone){//进行运行类型判断
+>  >           ((Phone)usbs[i]).call();//向下转型
+>  >       }
+>  >   }
+>  >}
+>  >}
+>  >interface Usb{
+>  >void start();
+>  >}
+>  >class Phone implements Usb{
+>  >public void call(){
+>  >   System.out.println("Call is working...");
+>  >}
+>  >
+>  >@Override
+>  >public void start() {
+>  >   System.out.println("Phone starts...");
+>  >}
+>  >}
+>  >class Camera implements Usb{
+>  >@Override
+>  >public void start() {
+>  >   System.out.println("Camera starts...");
+>  >}
+>  >}
+>  >```
 >
 >3. 接口存在多态传递现象
 >
->   ```java
->   public class TestEmployee {
->       public static void main(String[] args) {
->           //接口类型的变量可以指向实现了该接口的对象实例
->           A a = new C();
->           //如果B接口继承了A接口，同时C类实现了B接口
->           //那么实际上相当于C类也实现了A接口
->           B b = new C();
->       }
->   }
->   interface A{ }
->   interface B extends A{ }
->   class C implements B{
->   }
->   ```
+>  ```java
+>  public class TestEmployee {
+>      public static void main(String[] args) {
+>          //接口类型的变量可以指向实现了该接口的对象实例
+>          A a = new C();
+>          //如果B接口继承了A接口，同时C类实现了B接口
+>          //那么实际上相当于C类也实现了A接口
+>          B b = new C();
+>      }
+>  }
+>  interface A{ }
+>  interface B extends A{ }
+>  class C implements B{
+>  }
+>  ```
 
 *ps：类的五大成员：(1)属性；(2)方法；(3)构造器；(4)代码块；(5)内部类*
 
@@ -888,11 +898,12 @@ java.lang.Runtime就是典型的单例模式
 
 >```java
 >class Outer{//外部类
->    class Inner{//内部类
->    }
+>class Inner{//内部类
+>}
 >}
 >class Outer{//其他外部类
 >}
+>```
 
 ##### 内部类的分类
 
@@ -1107,16 +1118,16 @@ java.lang.Runtime就是典型的单例模式
 >
 >```java
 >class Outer02{
->    private int n = 1;
->    class Inner02{
->        public void say(){
->            System.out.println("n1 = " + n);
->        }
->    }
->    private void f1(){
->        Inner02 inner02 = new Inner02();
->        inner02.say();
->    }
+>   private int n = 1;
+>   class Inner02{
+>       public void say(){
+>           System.out.println("n1 = " + n);
+>       }
+>   }
+>   private void f1(){
+>       Inner02 inner02 = new Inner02();
+>       inner02.say();
+>   }
 >}
 >```
 >
@@ -1126,22 +1137,22 @@ java.lang.Runtime就是典型的单例模式
 >
 >5. 外部其它类-->访问-->成员内部类
 >
->   > 两种方式
->   >
->   > * ```java
->   >   Outer outer = new Outer();
->   >   //相当于将new Inner()当做了outer的一个成员
->   >   Outer.Inner inner = outer.new Inner();
->   >   ```
->   >
->   > * ```java
->   >   //在外部类中写一个方法，方法直接返回一个Inner类的实例
->   >   class Outer{
->   >       public Inner getInnerInstance{
->   >           return new Inner();
->   >       }
->   >   }
->   >   ```
+>  > 两种方式
+>  >
+>  > * ```java
+>  >   Outer outer = new Outer();
+>  >   //相当于将new Inner()当做了outer的一个成员
+>  >   Outer.Inner inner = outer.new Inner();
+>  >   ```
+>  >
+>  > * ```java
+>  >   //在外部类中写一个方法，方法直接返回一个Inner类的实例
+>  >   class Outer{
+>  >       public Inner getInnerInstance{
+>  >           return new Inner();
+>  >       }
+>  >   }
+>  >   ```
 
 ###### 静态内部类
 

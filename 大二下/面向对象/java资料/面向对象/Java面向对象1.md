@@ -258,38 +258,41 @@
   >
   >3. 访问成员方法的语法：this.方法名(参数列表)；
   >
-  >   ```Java
-  >   class Solution {
-  >       String name;
-  >       public void f1() {
-  >           System.out.println("f1...");
-  >       }
-  >       public void f2() {
-  >           System.out.println("f2...");
-  >           f1();
-  >           this.f1(); // 这里就是利用了this来访问方法
-  >       }
-  >   }
+  >  ```Java
+  >  class Solution {
+  >      String name;
+  >      public void f1() {
+  >          System.out.println("f1...");
+  >      }
+  >      public void f2() {
+  >          System.out.println("f2...");
+  >          f1();
+  >          this.f1(); // 这里就是利用了this来访问方法
+  >      }
+  >  }
+  >  ```
+  >
+  >  
   >
   >4. 访问构造器的语法：this(参数列表)；***ps：只能在构造器中使用，且如果使用this来访问构造器，必须放在首句定义***
   >
-  >   ```Java
-  >   public class Main {
-  >       public static void main(String[] args) {
-  >           Solution solution = new Solution();
-  >           System.out.println(solution.name);
-  >       }
-  >   }
-  >   class Solution {
-  >       String name;
-  >       public Solution(String name) {
-  >           this.name = name;
-  >       }
-  >       public Solution() {
-  >           this("haha");  // 在构造器中利用this来访问其他的构造器
-  >           //且只能放在构造器的首句上！！！！
-  >       }
-  >   }
+  >  ```Java
+  >  public class Main {
+  >      public static void main(String[] args) {
+  >          Solution solution = new Solution();
+  >          System.out.println(solution.name);
+  >      }
+  >  }
+  >  class Solution {
+  >      String name;
+  >      public Solution(String name) {
+  >          this.name = name;
+  >      }
+  >      public Solution() {
+  >          this("haha");  // 在构造器中利用this来访问其他的构造器
+  >          //且只能放在构造器的首句上！！！！
+  >      }
+  >  }
   >
   >5. this不能在类定义的外部使用，只能在类定义基本的方法、构造器中使用
   >
@@ -297,42 +300,44 @@
 
 ###### this习题
 
->1. ```Java
->   // 返回一个double数组的最大值
->   public class Main {
->       public static void main(String[] args) {
->           double[] nums = {1.0, 2.6, 2.9, -4, 2.5, 3.9};
->           A01 a01 = new A01();
->           //这里使用了Double包装类可以完全避免了数组中如果不存在，而返回的值恰巧是求解的值的           问题
->           Double max = a01.max(nums);
->           if(max != null) {
->               System.out.println("max is " + max);
->           }else {
->               System.out.println("数组不存在");
->           }
->       }
->   }
->   class A01 {
->       public Double max (double[] nums) {
->           if( nums != null && nums.length < 0) {
->               return null;  
->           }else {
->               double ret = nums[0];
->               for(int i = 1; i < nums.length; i++) {
->                   if(nums[i] > ret) {
->                       ret = nums[i];
->                   }
->               }
->               return ret;
->           }
->       }
->   }
->
+>1.  
+>  
+>  ```java
+>  // 返回一个double数组的最大值
+>  public class Main {
+>      public static void main(String[] args) {
+>          double[] nums = {1.0, 2.6, 2.9, -4, 2.5, 3.9};
+>          A01 a01 = new A01();
+>          //这里使用了Double包装类可以完全避免了数组中如果不存在，而返回的值恰巧是求解的值的           问题
+>          Double max = a01.max(nums);
+>          if(max != null) {
+>              System.out.println("max is " + max);
+>          }else {
+>              System.out.println("数组不存在");
+>          }
+>      }
+>  }
+>  class A01 {
+>      public Double max (double[] nums) {
+>          if( nums != null && nums.length < 0) {
+>              return null;  
+>          }else {
+>              double ret = nums[0];
+>              for(int i = 1; i < nums.length; i++) {
+>                  if(nums[i] > ret) {
+>                      ret = nums[i];
+>                  }
+>              }
+>              return ret;
+>          }
+>      }
+>  }
+>  
 >2. 如何生成0、1、2的随机数
 >
->   ```Java
->           Random random = new Random();
->           ret = random.nextInt(3);
+>  ```Java
+>          Random random = new Random();
+>          ret = random.nextInt(3);
 
 
 
