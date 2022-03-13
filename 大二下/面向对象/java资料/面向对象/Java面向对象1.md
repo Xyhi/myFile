@@ -6,7 +6,7 @@
 
 * 方法区常量池（加载类的 **属性信息** 以及 **方法(行为)信息** ）
 
-  <img src="C:\Users\020227\Desktop\大二上技术进程\韩顺平java\Java面向对象\001.jpg" style="zoom:40%;" />
+  <img src=".\001.jpg" style="zoom:40%;" />
 
   <font color="grey">*ps:基本数据类型会直接在堆中存储，而string是引用类型，会在方法区的常量池中存储数据，由堆中的地址进行指向*</font>
 
@@ -248,7 +248,7 @@
 * 主要是解决前面变量命名问题
 * java虚拟机会给每个对象分配this，来指代当前对象
 
-<img src="C:\Users\020227\Desktop\大二上技术进程\韩顺平java\Java面向对象\002.jpg" style="zoom:40%;" />
+<img src=".\002.jpg" style="zoom:40%;" />
 
 * this的注意事项和使用细节
 

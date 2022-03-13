@@ -106,7 +106,7 @@
 >
 >3. 该方法接收String类型的数组参数，该数组中保存执行java命令时传递给所运行类的参数
 >
-><img src="C:\Users\020227\Desktop\大二上技术进程\韩顺平java\Java面向对象\007.jpg" style="zoom:40%;" />
+><img src=".\007.jpg" style="zoom:40%;" />
 
 ###### 注意事项和细节
 

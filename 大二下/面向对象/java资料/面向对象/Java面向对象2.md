@@ -159,7 +159,7 @@
 
 >当子类对象创建好后，建立查找关系
 >
-><img src="C:\Users\020227\Desktop\大二上技术进程\韩顺平java\Java面向对象\003.jpg" style="zoom:40%;" />
+><img src=".\003.jpg" style="zoom:40%;" />
 >
 >1. 首先看子类是否有该属性
 >2. 如果子类有这个属性，并且可以访问，则返回信息
@@ -213,9 +213,8 @@
 >  public void sayOK(){}         // 子类
 >  ```
 >  
->  
 
-<img src="C:\Users\020227\Desktop\大二上技术进程\韩顺平java\Java面向对象\004.jpg" style="zoom:40%;" />
+<img src=".\004.jpg" style="zoom:40%;" />
 
 #### 多态（polymorphic）
 
