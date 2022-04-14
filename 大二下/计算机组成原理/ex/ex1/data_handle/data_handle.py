@@ -21,47 +21,51 @@ def switch_dict(func, data):
         'bgeu': B_type,'ecall': I_type,'ebreak': I_type
     }.get(func, "Sorry! The instruction can't be found in risc-v instruction sets, please google it")
 
+def main():
+    result = []
+    # data.txt is the file by disassembly
+    # you need to create the file in example.txt format
+    with open('data.txt','r') as r:
+        data = r.read().split('\n')
+        for i in data:
+            result.append(i.split(':')[-1])
+    data1 = []
+    data2 = []
+    for item in result:
+        data1.append(item.strip('\t').split()[0])
+        data2.append(item.strip('\t').split()[1])
+    dict = {
+        '0': '0000', '1': '0001', '2': '0010', '3': '0011',
+        '4': '0100', '5': '0101', '6': '0110', '7': '0111',
+        '8': '1000', '9': '1001', 'a': '1010', 'b': '1011',
+        'c': '1100', 'd': '1101', 'e': '1110', 'f': '1111',
+    }
+    data3 = []
+    for item in data1:
+        temp = ""
+        for i in item:
+            temp += dict[i]
+        data3.append(temp)
 
-result = []
-# data.txt is the file by disassembly
-# you need to create the file in example.txt format
-with open('example.txt','r') as r:
-    data = r.read().split('\n')
-    for i in data:
-        result.append(i.split(':')[-1])
-data1 = []
-data2 = []
-for item in result:
-    data1.append(item.strip('\t').split()[0])
-    data2.append(item.strip('\t').split()[1])
-dict = {
-    '0': '0000', '1': '0001', '2': '0010', '3': '0011',
-    '4': '0100', '5': '0101', '6': '0110', '7': '0111',
-    '8': '1000', '9': '1001', 'a': '1010', 'b': '1011',
-    'c': '1100', 'd': '1101', 'e': '1110', 'f': '1111',
-}
-data3 = []
-for item in data1:
-    temp = ""
-    for i in item:
-        temp += dict[i]
-    data3.append(temp)
+    data = []
+    for i in range(len(data1)):
+        data.append((data3[i][::-1], data2[i]))
 
-data = []
-for i in range(len(data1)):
-    data.append((data3[i][::-1], data2[i]))
+    ans = []
+    for i in range(len(data)):
+        if len(data[i][0]) == 32:
+            temp = switch_dict(data[i][1], data[i])
+            ans.append(data3[i] + " " + temp)
+        else:
+            ans.append(data3[i] + " Sorry!Please check the 16-bit instructions yourself")
+    for i in ans:
+        print(i)
+    # output.txt is the result you want maybe
+    with open("output.txt", 'w') as w:
+        for item in ans:
+            w.write(item)
+            w.write('\n')
 
-ans = []
-for i in range(len(data)):
-    if len(data[i][0]) == 32:
-        temp = switch_dict(data[i][1], data[i])
-        ans.append(data3[i] + " " + temp)
-    else:
-        ans.append(data3[i] + " Sorry!Please check the 16-bit instructions yourself")
-for i in ans:
-    print(i)
-# output.txt is the result you want maybe
-with open("output.txt", 'w') as w:
-    for item in ans:
-        w.write(item)
-        w.write('\n')
+
+if __name__ == '__main__':
+    main()
