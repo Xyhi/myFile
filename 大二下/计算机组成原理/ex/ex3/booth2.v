@@ -57,7 +57,7 @@ always@(posedge clk or negedge rst_n) begin
 				ext_y <= ext_y >> 2;
 				result_temp <= result_temp + cal_temp;
 				mul_num <= mul_num + 1'b1;
-				if(mul_num == 9) begin
+				if(mul_num == 8) begin
 					state <= state + 1'b1;
 				end
 			end
