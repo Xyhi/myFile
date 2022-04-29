@@ -9,14 +9,14 @@ module booth (
 );
 reg[1:0] state;
 reg[3:0] mul_num;
-reg[15:0] mul_x;
-reg[15:0] inv_x;
-reg[15:0] acc;
+reg[16:0] mul_x;
+reg[16:0] inv_x;
+reg[16:0] acc;
 reg[16:0] mq;
 reg busy_reg = 1'b0;
-reg[15:0] cal_temp = 16'b0; 
+reg[16:0] cal_temp = 17'b0; 
 assign busy = busy_reg;
-assign z = {acc, mq[16:1]};
+assign z = {acc, mq[16:2]};
 
 always@(posedge clk or negedge rst_n) begin
     if(!rst_n) begin
@@ -31,24 +31,27 @@ always@(posedge clk or negedge rst_n) begin
         case(state) 
             0: begin
                 mq = {y, 1'b0};
-                acc <= 16'b0;
-                mul_x <= x;
-                inv_x <= ~x + 1'b1;
+                acc <= 17'b0;
+                mul_x <= {x[15],x};
+                inv_x <= ~{x[15],x} + 1'b1;
                 state <= state + 1'b1;
                 busy_reg <= 1'b1;
             end
             1: begin
-                acc <= {cal_temp[15], cal_temp[15:1]};
-                mq <= {cal_temp[0], mq[16:1]};
-                mul_num <= mul_num + 1'b1;
                 if(mul_num == 15) begin
                     state <= state + 1'b1;
                 end
+                else begin
+                    acc <= {cal_temp[16], cal_temp[16:1]};
+                    mq <= {cal_temp[0], mq[16:1]};
+                    mul_num <= mul_num + 1'b1;
+                end
             end
             2: begin
-                // acc <= acc + cal_temp;
+                acc <= cal_temp;
                 busy_reg <= 1'b0;
                 state <= 1'b0;
+                mul_num <= 0;
             end     
         endcase
     end
