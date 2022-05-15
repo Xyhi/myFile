@@ -30,7 +30,8 @@ localparam READY        = 5'b00000,
 
 wire        wea;                        
 wire [31:0] updatedata_to_mem;              //写命中时根据offset更改cache_line重新写入
-wire [37:0] cache_line_r = wreq_from_cpu?   //根据wreq_from_cpu判断是从主存中直接读取数据写入cache，还是更改cache_line后重新写入?
+//在读缺失时，会从主存中直接获取信息写入cache中，写命中时，利用wdata_from_cpu更改cache_line行字节信息，重新载入cache
+wire [37:0] cache_line_r = wreq_from_cpu?   //根据wreq_from_cpu判断是从主存中直接读取数据写入cache，还是更改cache_line后重新写入
                            {1'b1, addr_from_cpu[12:8], updatedata_to_mem}: 
                            {1'b1, addr_from_cpu[12:8], rdata_from_mem};        
 wire [37:0] cache_line;                
@@ -70,7 +71,7 @@ always @(posedge clk) begin
     end
 end
 
-//根据读时序状态机进行状态进行转移
+//根据读时序状态机进行状态转移
 always @(*) begin
     case(current_state)
         READY: begin
@@ -121,6 +122,7 @@ always @(*) begin
                 next_state_w = TAG_CHECK_W;
             end
         end
+        //写缺失不处理，直接转入到READY_W状态
         WR_DATA: begin
             next_state_w = READY_W;
         end
